@@ -35,6 +35,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SMTP_CONFIG = {
+    'server': os.getenv("SMTP_SERVER"),
+    'port': os.getenv("SMTP_PORT"),
+    "admin": os.getenv("SERVER_EMAIL"),
+    "password": os.getenv("PASSWORD_EMAIL")
+}
+
+CERTIFICADO_BASE = BASE_DIR / "data" / "template_certificado.pdf"
 
 # Application definition
 

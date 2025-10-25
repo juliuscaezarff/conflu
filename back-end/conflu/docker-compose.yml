@@ -1,0 +1,21 @@
+services:
+  conflu:
+    build: .
+    container_name: conflu
+    command: >
+      sh -c "python manage.py migrate &&
+            python manage.py run_admin &&
+            python manage.py runserver 0.0.0.0:${CONFLU_PORT}"
+    environment:
+      - SECRET_KEY= ${SECRET_KEY}
+      - DJANGO_SUPERUSER_USERNAME= admin
+      - DJANGO_SUPERUSER_PASSWORD= admin123
+      - DJANGO_SUPERUSER_EMAIL= admin@example.com
+    ports:
+      - "${CONFLU_PORT}:${CONFLU_PORT}"
+    networks:
+      - conflu_network
+
+networks:
+  conflu_network:
+    driver: bridge
