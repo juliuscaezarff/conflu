@@ -173,3 +173,62 @@ class EmpresaViewSet(viewsets.ViewSet):
 
         empresa.delete()
         return Response({"message": "Empresa deletada com sucesso!"}, status=status.HTTP_204_NO_CONTENT)
+    
+class TurmaViewSet(viewsets.ViewSet):
+    queryset = Turma.objects.all()
+    serializer_class = TurmaSerializer
+
+    def list(self, request):
+        try:
+            if request.method == "GET":
+                turmas = Turma.objects.all()
+                data = [{
+                    "id": turma.id,
+                    "curso_id": turma.curso_id.id,
+                    "localidade": turma.localidade,
+                    "data_inicio": turma.data_inicio,
+                    "data_fim": turma.data_fim,
+                } for turma in turmas]
+                return Response(data)
+        except Exception as e:
+            return Response({'error': e}, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, pk=None):
+        empresa = get_object_or_404(self.queryset, pk=pk)
+        serializer = TurmaSerializer(empresa)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = TurmaSerializer(data=request.data)
+        if serializer.is_valid():
+            turma_id = serializer.data.get('id')
+            curso_obj = Curso.objects.filter(turma_id=turma_id).first()
+            if curso_obj:
+                quant_aulas = curso_obj.quant_dias
+                
+            return Response({"message": "Turma criada com sucesso!", "data": serializer.data}, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def partial_update(self, request, pk=None):
+        try:
+            turma = Turma.objects.get(pk=pk)
+        except Turma.DoesNotExist:
+            return Response({"error": "Turma não encontrada."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = TurmaSerializer(turma, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Turma atualizada com sucesso!", "data": serializer.data}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, pk=None):
+        try:
+            turma = Turma.objects.get(pk=pk)
+        except Turma.DoesNotExist:
+            return Response({"error": "Turma não encontrada."}, status=status.HTTP_404_NOT_FOUND)
+
+        turma.delete()
+        return Response({"message": "Turma deletada com sucesso!"}, status=status.HTTP_204_NO_CONTENT)

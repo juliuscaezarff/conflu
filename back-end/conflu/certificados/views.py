@@ -45,11 +45,9 @@ class GerarCertificadoViewSet(viewsets.ViewSet):
         msg['Subject'] = f"CERTIFICADO - {aluno_nome}"
         
         msg.set_content(f"""
-            Olá, {aluno_nome}!
-            Segue em anexo o certificado referente ao curso concluído.
-
-            Atenciosamente,
-            Equipe Conflu AI
+            Olá, {aluno_nome}! Segue em anexo o certificado referente ao curso concluído.
+                
+            Atenciosamente, Equipe Conflu AI
         """)
 
          # Anexa o PDF

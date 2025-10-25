@@ -41,3 +41,16 @@ class EmpresaSerializer(serializers.ModelSerializer):
             'optante_simp_nacional',
         ]
         read_only_fields = ['id']
+
+class TurmaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Turma
+        fields = [
+            'id', 
+            'curso_id', 
+            'localidade', 
+            'data_inicio', 
+            'data_fim', 
+            'created_at'
+        ]
+        read_only_fields = ['id', 'created_at']
