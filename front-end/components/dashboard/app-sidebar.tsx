@@ -13,6 +13,7 @@ import {
   Settings2,
   SquareTerminal,
 } from "lucide-react"
+import { useSession } from "next-auth/react"
 
 import { NavMain } from "@/components/dashboard/nav-main"
 import { NavProjects } from "@/components/dashboard/nav-projects"
@@ -30,101 +31,47 @@ import {
 import Image from "next/image"
 
 const data = {
-  user: {
-    name: "User",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
+      title: "Visão Geral",
+      url: "/dashboard",
+      icon: PieChart,
       isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
     },
     {
-      title: "Models",
-      url: "#",
+      title: "Financeiro",
+      url: "/dashboard/financeiro",
       icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
     },
     {
-      title: "Documentation",
-      url: "#",
+      title: "Empresas",
+      url: "/dashboard/empresas",
+      icon: SquareTerminal,
+    },
+    {
+      title: "Alunos",
+      url: "/dashboard/alunos",
       icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
     },
     {
-      title: "Settings",
-      url: "#",
+      title: "Cursos",
+      url: "/dashboard/cursos",
+      icon: Frame,
+    },
+    {
+      title: "Perfil",
+      url: "/dashboard/perfil",
       icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
+    },
+    {
+      title: "Preferências",
+      url: "/dashboard/preferencias",
+      icon: Settings2,
     },
   ],
   navSecondary: [
     {
-      title: "Support",
+      title: "Suporte",
       url: "#",
       icon: LifeBuoy,
     },
@@ -154,6 +101,19 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { data: session } = useSession()
+
+  // Dados do usuário da sessão ou fallback
+  const userData = session?.user ? {
+    name: session.user.name || "Usuário",
+    email: session.user.email || "usuario@exemplo.com",
+    avatar: session.user.image || "/avatars/default.jpg",
+  } : {
+    name: "Usuário",
+    email: "usuario@exemplo.com", 
+    avatar: "/avatars/default.jpg",
+  }
+
   return (
     <Sidebar variant="inset" {...props}>
       <SidebarHeader>
@@ -174,12 +134,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        {/* <NavMain items={data.navMain} /> */}
+        <NavMain items={data.navMain} />
         <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userData} />
       </SidebarFooter>
     </Sidebar>
   )

@@ -9,6 +9,7 @@ import {
   Sparkles,
 } from "lucide-react"
 import { useTheme } from "next-themes"
+import { signOut } from "next-auth/react"
 
 import {
   Avatar,
@@ -43,6 +44,10 @@ export function NavUser({
 }) {
   const { isMobile } = useSidebar()
   const { theme, setTheme } = useTheme()
+
+  const handleLogout = () => {
+    signOut({ callbackUrl: '/auth' })
+  }
 
   return (
     <SidebarMenu>
@@ -107,7 +112,7 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <LogOut />
               Log out
             </DropdownMenuItem>

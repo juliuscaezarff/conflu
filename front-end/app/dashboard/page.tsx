@@ -4,6 +4,17 @@ import React from 'react'
 import { Building2, GraduationCap, BookOpen, TrendingUp } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAlunosStats, useCursosStats, useEmpresasStats } from '@/hooks'
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+} from "@/components/ui/breadcrumb"
+import { Separator } from "@/components/ui/separator"
+import {
+  SidebarInset,
+  SidebarTrigger,
+} from "@/components/ui/sidebar"
 
 interface StatCardProps {
   title: string
@@ -36,15 +47,34 @@ export default function DashboardPage() {
   const { data: empresasStats, isLoading: isLoadingEmpresas } = useEmpresasStats()
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Visão geral do sistema de gestão educacional
-        </p>
-      </div>
+    <SidebarInset>
+      <header className="flex h-16 shrink-0 items-center gap-2">
+        <div className="flex items-center gap-2 px-4">
+          <SidebarTrigger className="-ml-1" />
+          <Separator
+            orientation="vertical"
+            className="mr-2 data-[orientation=vertical]:h-4"
+          />
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/dashboard">
+                  Dashboard
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+        </div>
+      </header>
+      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div>
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Visão geral do sistema de gestão educacional
+          </p>
+        </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total de Empresas"
           value={empresasStats?.total || 0}
@@ -146,5 +176,6 @@ export default function DashboardPage() {
         </Card>
       </div>
     </div>
+  </SidebarInset>
   )
 }
