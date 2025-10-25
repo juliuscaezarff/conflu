@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { AuthForm } from "./_components/auth-form";
 import Image from "next/image";
 import { ArrowLeftIcon } from "lucide-react";
 import { Warp } from "@paper-design/shaders-react";
 import { useContainerDimensions } from "@/hooks/use-container-dimensions";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Page() {
   const { ref, dimensions } = useContainerDimensions();
@@ -49,7 +50,35 @@ export default function Page() {
           </div>
         </div>
         <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-          <AuthForm />
+          <div className="w-full">
+            <div className="lg:hidden mb-8 flex items-center justify-center">
+              <Image src="/conflu04.png" alt="Conflu" width={350} height={350} />
+            </div>
+            
+            <Card className="mx-auto w-[380px]">
+              <CardHeader className="space-y-1">
+                <CardTitle className="text-2xl font-semibold">
+                  Bem-vindo ao Conflu
+                </CardTitle>
+                <CardDescription>
+                  Escolha uma opção para continuar
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Link href="/auth/login" className="block">
+                  <Button className="w-full" size="lg">
+                    Fazer Login
+                  </Button>
+                </Link>
+                
+                <Link href="/auth/register" className="block">
+                  <Button variant="outline" className="w-full" size="lg">
+                    Criar Conta
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </main>
