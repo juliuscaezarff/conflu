@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { AuthGuard } from '@/components/auth/auth-guard'
 import {
   LayoutDashboard,
   Building2,
@@ -86,34 +87,36 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="flex h-screen bg-background">
-      {/* Desktop Sidebar */}
-      <div className="hidden w-64 lg:block">
-        <Sidebar />
-      </div>
+    <AuthGuard>
+      <div className="flex h-screen bg-background">
+        {/* Desktop Sidebar */}
+        <div className="hidden w-64 lg:block">
+          <Sidebar />
+        </div>
 
-      {/* Mobile Sidebar */}
-      <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden fixed top-4 left-4 z-50"
-          >
-            <Menu className="h-6 w-6" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0">
-          <Sidebar onItemClick={() => setSidebarOpen(false)} />
-        </SheetContent>
-      </Sheet>
+        {/* Mobile Sidebar */}
+        <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden fixed top-4 left-4 z-50"
+            >
+              <Menu className="h-6 w-6" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-64 p-0">
+            <Sidebar onItemClick={() => setSidebarOpen(false)} />
+          </SheetContent>
+        </Sheet>
 
-      {/* Main Content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <main className="flex-1 overflow-y-auto p-6 lg:p-8">
-          {children}
-        </main>
+        {/* Main Content */}
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <main className="flex-1 overflow-y-auto p-6 lg:p-8">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </AuthGuard>
   )
 }

@@ -9,27 +9,27 @@ import {
   CardFooter
 } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { RecycleIcon } from 'lucide-react'
+import { signIn } from 'next-auth/react'
 
 export function AuthForm() {
   const [isLoading, setIsLoading] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleGoogleLogin = async () => {
     setIsLoading(true)
     
-    // Simulação de login estático
-    setTimeout(() => {
-      console.log('Login realizado com:', { email, password })
+    try {
+      await signIn('google', {
+        callbackUrl: '/dashboard'
+      })
+    } catch (error) {
+      console.error('Erro no login com Google:', error)
+    } finally {
       setIsLoading(false)
-      // Aqui você pode adicionar redirecionamento ou outras ações
-    }, 1000)
+    }
   }
 
   return (
@@ -50,7 +50,7 @@ export function AuthForm() {
       <CardContent>
         <div className="mt-3 flex w-full">
           <Button
-          
+            onClick={handleGoogleLogin}
             className="w-full"
             variant="outline"
             disabled={isLoading}
@@ -66,7 +66,7 @@ export function AuthForm() {
                 className="mr-2"
               />
             )}
-            {isLoading ? 'Entrando...' : 'Sign in with Google'}
+            {isLoading ? 'Entrando...' : 'Entrar com Google'}
           </Button>
         </div>
       </CardContent>
