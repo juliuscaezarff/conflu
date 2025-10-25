@@ -1,6 +1,6 @@
 "use client"
 
-import { useSession } from "next-auth/react"
+import { useAuth } from "@/providers/auth-provider"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
@@ -10,19 +10,19 @@ interface AuthGuardProps {
 }
 
 export function AuthGuard({ children, fallback }: AuthGuardProps) {
-  const { data: session, status } = useSession()
+  const { user, isLoading, isAuthenticated } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (status === "loading") return
+    if (isLoading) return
 
-    if (!session) {
+    if (!isAuthenticated) {
       router.push("/auth")
       return
     }
-  }, [session, status, router])
+  }, [isAuthenticated, isLoading, router])
 
-  if (status === "loading") {
+  if (isLoading) {
     return (
       fallback || (
         <div className="flex items-center justify-center min-h-screen">
@@ -32,7 +32,7 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
     )
   }
 
-  if (!session) {
+  if (!isAuthenticated) {
     return null // Redirecionando...
   }
 

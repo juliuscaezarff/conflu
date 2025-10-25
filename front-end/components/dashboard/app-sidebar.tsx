@@ -13,7 +13,7 @@ import {
   Settings2,
   SquareTerminal,
 } from "lucide-react"
-import { useSession } from "next-auth/react"
+import { useAuth } from "@/providers/auth-provider"
 
 import { NavMain } from "@/components/dashboard/nav-main"
 import { NavProjects } from "@/components/dashboard/nav-projects"
@@ -57,17 +57,7 @@ const data = {
       title: "Cursos",
       url: "/dashboard/cursos",
       icon: Frame,
-    },
-    {
-      title: "Perfil",
-      url: "/dashboard/perfil",
-      icon: Settings2,
-    },
-    {
-      title: "Preferências",
-      url: "/dashboard/preferencias",
-      icon: Settings2,
-    },
+    }
   ],
   navSecondary: [
     {
@@ -81,37 +71,19 @@ const data = {
       icon: Send,
     },
   ],
-  projects: [
-    {
-      name: "Cursos",
-      url: "#",
-      icon: Frame,
-    },
-    // {
-    //   name: "Sales & Marketing",
-    //   url: "#",
-    //   icon: PieChart,
-    // },
-    // {
-    //   name: "Travel",
-    //   url: "#",
-    //   icon: Map,
-    // },
-  ],
+ 
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { data: session } = useSession()
+  const { user } = useAuth()
 
   // Dados do usuário da sessão ou fallback
-  const userData = session?.user ? {
-    name: session.user.name || "Usuário",
-    email: session.user.email || "usuario@exemplo.com",
-    avatar: session.user.image || "/avatars/default.jpg",
+  const userData = user ? {
+    name: user.name || "Usuário",
+    email: user.email || "usuario@exemplo.com",
   } : {
     name: "Usuário",
-    email: "usuario@exemplo.com", 
-    avatar: "/avatars/default.jpg",
+    email: "usuario@exemplo.com",
   }
 
   return (
@@ -135,7 +107,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
